@@ -12,5 +12,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(204).send("");
   }
 
-  return res.status(200).json(answer[0].randomAnswers().toObject());
+  const selectedAnswer = answer[0].randomAnswers();
+
+  return res.status(200).json(selectedAnswer.toObject());
 }

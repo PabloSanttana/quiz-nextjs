@@ -32,11 +32,24 @@ export default class questionModel {
     return this.#toHit;
   }
 
+  // para verificar se foi respondida
   get HandleAnswer() {
     for (let answer of this.answers) {
-      if (answer.revealed) return false;
+      if (answer.revealed) return true;
     }
     return false;
+  }
+
+  handleAnswerQuestion(index: number): questionModel {
+    const toHit = this.#answers[index]?.certain;
+
+    const answers = this.#answers.map((answer, i) => {
+      const selectedAnswer = index === i;
+      const revealed = selectedAnswer || answer.certain;
+      return revealed ? answer.handleRevealed() : answer;
+    });
+
+    return new questionModel(this.#id, this.#utterance, answers, toHit);
   }
 
   // embaralhar as repostas
@@ -54,8 +67,9 @@ export default class questionModel {
     return {
       id: this.#id,
       utterance: this.#utterance,
-      answers: this.#answers.map((answer) => answer.toObject()),
+      isAnswer: this.HandleAnswer,
       toHit: this.#toHit,
+      answers: this.#answers.map((answer) => answer.toObject()),
     };
   }
 }
