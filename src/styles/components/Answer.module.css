@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  min-width: 500px;
+  width: 80%;
+  align-self: stretch;
+  height: 100px;
+  margin: 10px;
+}
+.content {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.front,
+.back {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.front {
+  color: #000000;
+  background-color: #fff;
+  align-items: center;
+  border-radius: 12px;
+  padding: 15px;
+}
+.text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-right: 20px;
+  color: #fff;
+}
+.value {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
