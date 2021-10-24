@@ -2,6 +2,7 @@ import React from "react";
 import questionModel from "../model/question";
 import styles from "../styles/components/Question.module.css";
 import Answer from "./Answer";
+import Time from "./Time";
 import Utterance from "./Utterance";
 
 const letras = [
@@ -13,7 +14,9 @@ const letras = [
 
 interface AnswerProps {
   value: questionModel;
+  duration: number;
   onResponse: (index: number) => void;
+  timefinished: () => void;
 }
 
 export default function Question(props: AnswerProps) {
@@ -37,6 +40,7 @@ export default function Question(props: AnswerProps) {
   return (
     <div className={styles.container}>
       <Utterance text={value.utterance} />
+      <Time duration={props.duration} timefinished={props.timefinished} />
       {renderAnswer()}
     </div>
   );

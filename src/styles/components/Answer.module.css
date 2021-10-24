@@ -18,6 +18,7 @@
   display: flex;
   height: 100%;
   width: 100%;
+  cursor: pointer;
 }
 
 .front {
@@ -26,6 +27,22 @@
   align-items: center;
   border-radius: 12px;
   padding: 15px;
+}
+
+.back > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  border-radius: 12px;
+}
+
+.certain {
+  background-color: #2baa6b;
+}
+.wrong {
+  background-color: #e44a4c;
 }
 .text {
   display: flex;

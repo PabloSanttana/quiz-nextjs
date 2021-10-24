@@ -1,0 +1,16 @@
+.container {
+  background-color: #9885f0;
+  color: #fff;
+  font-weight: 200;
+  font-size: 1.2em;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 10px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.container:hover {
+  transform: scale(1.1);
+}

@@ -34,7 +34,7 @@ export default class questionModel {
 
   // para verificar se foi respondida
   get HandleAnswer() {
-    for (let answer of this.answers) {
+    for (let answer of this.#answers) {
       if (answer.revealed) return true;
     }
     return false;

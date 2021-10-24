@@ -1,9 +1,9 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Question from "../components/Question";
 import answerModel from "../model/answer";
 import questionModel from "../model/question";
-import styles from "../styles/pages/Home.module.css";
+import Button from "../components/Button";
 
 const teste = new questionModel(20, "melhor", [
   answerModel.wrong("verde"),
@@ -14,11 +14,22 @@ const teste = new questionModel(20, "melhor", [
 
 export default function Home() {
   const [question, setQuestion] = useState(teste);
+  const questionRef = useRef<questionModel>();
+
+  useEffect(() => {
+    questionRef.current = question;
+    return () => {};
+  }, [question]);
 
   function handleSelectedAnswer(index: number) {
-    const Newquestion = teste.handleAnswerQuestion(index);
+    const Newquestion = question.handleAnswerQuestion(index);
     setQuestion(Newquestion);
-    console.log(Newquestion.toObject());
+  }
+
+  function handleTimefinished() {
+    if (!questionRef.current.HandleAnswer) {
+      setQuestion(question.handleAnswerQuestion(-1));
+    }
   }
   return (
     <div>
@@ -32,11 +43,18 @@ export default function Home() {
         style={{
           display: "flex",
           height: "100vh",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <Question value={question} onResponse={handleSelectedAnswer} />
+        <Question
+          duration={5}
+          value={question}
+          onResponse={handleSelectedAnswer}
+          timefinished={handleTimefinished}
+        />
+        <Button text="próxima Questão" href="/resultado" />
       </main>
     </div>
   );
