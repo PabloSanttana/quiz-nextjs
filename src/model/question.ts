@@ -63,6 +63,14 @@ export default class questionModel {
     );
   }
 
+  static toQuestionModel(obj: questionModel): questionModel {
+    const answers = obj.answers.map((answer, i) =>
+      answerModel.toAnswerModel(answer)
+    );
+
+    return new questionModel(obj.id, obj.utterance, answers, obj.toHit);
+  }
+
   toObject() {
     return {
       id: this.#id,

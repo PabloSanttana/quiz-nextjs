@@ -26,7 +26,7 @@ export default function Question(props: AnswerProps) {
     return value.answers.map((value, index) => {
       return (
         <Answer
-          key={index}
+          key={`${index}-${props.value.id}`}
           value={value}
           index={index}
           text={letras[index].value}
@@ -40,7 +40,11 @@ export default function Question(props: AnswerProps) {
   return (
     <div className={styles.container}>
       <Utterance text={value.utterance} />
-      <Time duration={props.duration} timefinished={props.timefinished} />
+      <Time
+        key={value.id}
+        duration={props.duration}
+        timefinished={props.timefinished}
+      />
       {renderAnswer()}
     </div>
   );

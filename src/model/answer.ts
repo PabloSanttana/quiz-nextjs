@@ -34,6 +34,10 @@ export default class answerModel {
     return new answerModel(this.#value, this.#certain, true);
   }
 
+  static toAnswerModel(obj: answerModel): answerModel {
+    return new answerModel(obj.value, obj.certain, obj.revealed);
+  }
+
   toObject() {
     return {
       value: this.#value,

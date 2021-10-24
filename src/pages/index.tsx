@@ -1,35 +1,69 @@
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import Question from "../components/Question";
-import answerModel from "../model/answer";
 import questionModel from "../model/question";
-import Button from "../components/Button";
+import Quiz from "../components/Quiz";
+import { useRouter } from "next/router";
 
-const teste = new questionModel(20, "melhor", [
-  answerModel.wrong("verde"),
-  answerModel.wrong("Azul"),
-  answerModel.wrong("Amarelo"),
-  answerModel.certain("Preto"),
-]);
+const BASE_URL = "http://localhost:3000/api";
 
 export default function Home() {
-  const [question, setQuestion] = useState(teste);
+  const router = useRouter();
+  const [ids, setIds] = useState<number[]>([]);
+  const [question, setQuestion] = useState<questionModel>();
   const questionRef = useRef<questionModel>();
+  const [questionsRight, setQuestionsRight] = useState<number>(0);
 
   useEffect(() => {
     questionRef.current = question;
     return () => {};
   }, [question]);
 
-  function handleSelectedAnswer(index: number) {
-    const Newquestion = question.handleAnswerQuestion(index);
-    setQuestion(Newquestion);
+  useEffect(() => {
+    getIdsQuestions();
+    return () => {};
+  }, []);
+  useEffect(() => {
+    ids.length > 0 && getQuestions(ids[0]);
+    return () => {};
+  }, [ids]);
+
+  async function getIdsQuestions() {
+    const res = await fetch(BASE_URL + "/quiz");
+    const ids = await res.json();
+    setIds(ids);
+  }
+  async function getQuestions(id: number) {
+    const res = await fetch(`${BASE_URL}/questoes/${id}`);
+    const questions = await res.json();
+
+    setQuestion(questionModel.toQuestionModel(questions));
   }
 
-  function handleTimefinished() {
-    if (!questionRef.current.HandleAnswer) {
+  function handleSelectedAnswer(question: questionModel) {
+    setQuestion(question);
+    const toHit = question.toHit;
+    setQuestionsRight(questionsRight + (toHit ? 1 : 0));
+  }
+
+  function idQuestionNext() {
+    const nextIndex = ids.indexOf(question.id) + 1;
+    return ids[nextIndex];
+  }
+
+  function handleNext() {
+    const nextID = idQuestionNext();
+
+    nextID ? nextQuestion(nextID) : finished();
+    /*  if (!questionRef.current.HandleAnswer) {
       setQuestion(question.handleAnswerQuestion(-1));
-    }
+    } */
+  }
+
+  function nextQuestion(index: number) {
+    getQuestions(index);
+  }
+  function finished() {
+    router.push(`/resultado?total=${ids.length}&certas=${questionsRight}`);
   }
   return (
     <div>
@@ -39,22 +73,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main
-        style={{
-          display: "flex",
-          height: "100vh",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Question
-          duration={5}
-          value={question}
-          onResponse={handleSelectedAnswer}
-          timefinished={handleTimefinished}
-        />
-        <Button text="próxima Questão" href="/resultado" />
+      <main>
+        {question && (
+          <Quiz
+            question={question}
+            last={idQuestionNext() === undefined}
+            answerQuestion={handleSelectedAnswer}
+            next={handleNext}
+          />
+        )}
       </main>
     </div>
   );
